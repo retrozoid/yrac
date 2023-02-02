@@ -43,7 +43,7 @@ func (s Service) CreateIssueSilently(ctx context.Context, issue Issue, fields st
 	var val Issue
 	values := toValues(fields)
 	values.Add("muteUpdateNotifications", "true")
-	var err = s.call(ctx, http.MethodPost, "/issues/", toValues(fields), issue, &val)
+	var err = s.call(ctx, http.MethodPost, "/issues/", values, issue, &val)
 	return val, err
 }
 
