@@ -39,6 +39,14 @@ func (s Service) CreateIssue(ctx context.Context, issue Issue, fields string) (I
 	return val, err
 }
 
+func (s Service) CreateIssueSilently(ctx context.Context, issue Issue, fields string) (Issue, error) {
+	var val Issue
+	values := toValues(fields)
+	values.Add("muteUpdateNotifications", "true")
+	var err = s.call(ctx, http.MethodPost, "/issues/", toValues(fields), issue, &val)
+	return val, err
+}
+
 func (s Service) UpdateIssue(ctx context.Context, id string, issue Issue, fields string) (Issue, error) {
 	var val Issue
 	var err = s.call(ctx, http.MethodPost, fmt.Sprintf("/issues/%s", id), toValues(fields), issue, &val)
@@ -126,5 +134,16 @@ func (s Service) GetUser(ctx context.Context, id string, fields string) (User, e
 	var p = url.Values{}
 	p.Add("fields", fields)
 	var err = s.call(ctx, http.MethodGet, fmt.Sprintf("/users/%s", id), p, nil, &val)
+	return val, err
+}
+
+func (s Service) GetUsers(ctx context.Context, query string, top int, skip int, fields string) ([]User, error) {
+	var val []User
+	var p = url.Values{}
+	p.Add("query", query)
+	p.Add("$top", fmt.Sprintf("%d", top))
+	p.Add("$skip", fmt.Sprintf("%d", skip))
+	p.Add("fields", fields)
+	var err = s.call(ctx, http.MethodGet, "/users", p, nil, &val)
 	return val, err
 }
