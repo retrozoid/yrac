@@ -159,6 +159,7 @@ type IssueTag struct {
 	Issues         []Issue     `json:"issues,omitempty"`
 	Color          *FieldStyle `json:"color,omitempty"`
 	UntagOnResolve bool        `json:"untagOnResolve,omitempty"`
+	Name           *string     `json:"name,omitempty"`
 }
 
 // Represents time tracking settings in the issue.
