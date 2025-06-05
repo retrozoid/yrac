@@ -147,3 +147,13 @@ func (s Service) GetUsers(ctx context.Context, query string, top int, skip int, 
 	var err = s.call(ctx, http.MethodGet, "/users", p, nil, &val)
 	return val, err
 }
+
+func (s Service) GetGroupUsers(ctx context.Context, id string, top int, skip int, fields string) ([]User, error) {
+	var val []User
+	var p = url.Values{}
+	p.Add("$top", fmt.Sprintf("%d", top))
+	p.Add("$skip", fmt.Sprintf("%d", skip))
+	p.Add("fields", fields)
+	var err = s.call(ctx, http.MethodGet, fmt.Sprintf("/groups/%s/users", id), p, nil, &val)
+	return val, err
+}
